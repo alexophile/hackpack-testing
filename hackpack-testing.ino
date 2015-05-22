@@ -3,6 +3,7 @@
 #include <Adafruit_NeoMatrix.h>
 #define PIN 1
 #include "RGB.h"
+#define arr_len( x )  ( sizeof( x ) / sizeof( *x ) )
 
 //initialize the matrix
 Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(8, 8, PIN,
@@ -18,25 +19,58 @@ void setup() {
 
 }
 
-void loop() {
+void loop() {/*
   crossFade(testgrey, swuorange, 50, 5);
   delay(1000);
   
- // scrollText("sendwithus", 90);
+  scrollText("sendwithus", 90);
   
   crossFade(swuorange, testgrey, 50, 5);
   delay(1000);
   
-  //drawFrameMono(swuorange, testgrey, envelope);
-  //delay(1000);
+  int envelope[8][8] = {
+    {0, 0, 0, 0, 0, 0, 0, 0},
+    {1, 1, 1, 1, 1, 1, 1, 1},
+    {1, 1, 0, 0, 0, 0, 1, 1},
+    {1, 0, 1, 0, 0, 1, 0, 1},
+    {1, 0, 0, 1, 1, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 1},
+    {1, 1, 1, 1, 1, 1, 1, 1},
+    {0, 0, 0, 0, 0, 0, 0, 0}
+  };
+  
+  extractFrameMono(swuorange, testgrey, envelope, 4);
+  delay(1000);
   
   colorWipe(testgrey, 0);
   delay(1000);  
   
-}
+*/}
 
 void scrollDownMono(RGB color, RGB bgColor, int drawing[][8]){
   
+}
+
+void extractFrameMono(RGB color, RGB bgColor, int drawing[][8], int offset){
+  
+  int frame[8][8] = {
+    {0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0}
+  };
+  int anchorRow = arr_len(drawing) -1 - offset;
+  for(int row = 0; row < 8; row++) {
+    for(int column = 0; column < 8; column++) {
+      frame[row][column] = drawing[anchorRow - row][column];  
+    }
+  }
+ 
+  drawFrameMono( color, bgColor, frame);
 }
 
 void drawFrameMono(RGB color, RGB bgColor, int frame[][8]){
